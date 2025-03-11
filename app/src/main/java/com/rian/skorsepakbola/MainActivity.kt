@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,17 +52,39 @@ fun ScoreScreen(viewModel: ScoreViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        viewModel.winningTeam?.let { winner ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                backgroundColor = Color(0xFF388E3C),
+                elevation = 4.dp,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = "$winner MENANG!",
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            TeamScore("Team A", viewModel.scoreA) { viewModel.incrementScore(true) }
+            TeamScore(viewModel.teamAName, viewModel.scoreA) { viewModel.incrementScore(true) }
             Divider(modifier = Modifier.height(160.dp).width(4.dp), color = Color.Gray)
-            TeamScore("Team B", viewModel.scoreB) { viewModel.incrementScore(false) }
+            TeamScore(viewModel.teamBName, viewModel.scoreB) { viewModel.incrementScore(false) }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
+
         Button(
             onClick = { viewModel.resetScores() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD32F2F)),
